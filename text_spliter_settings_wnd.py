@@ -8,6 +8,10 @@ class TextSpliterSettingsWindow(QMainWindow, Ui_Form):
         super().__init__()
         self.setupUi(self)
         self.main_wnd = main_wnd
+        self.wordCheckBox.setChecked(True)
+        self.sentenceCheckBox.setChecked(True)
+        self.paragrafCheckBox.setChecked(True)
+        self.areaCheckBox.setChecked(True)
 
 
 
