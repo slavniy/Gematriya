@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Кристалл имени</title>
+	<style>
+		h2{text-align: center; color: blue;}
+		body{padding: 20px;	font-size: 20px;}
+		table{border-collapse: collapse;}
+		th, td{border: 1px solid gray; padding: 5px; text-align: center;}
+		.selectable tr:hover{background-color: yellow; cursor: pointer;}
+		.red{color: red;}
+	</style>
+</head>
+<body>
+<h2>Имя в контексте всей буквицы</h2>
+<center><img src="name1.jpg" alt="Имя в контексте всей буквицы"></center>
+<h2>Кристалл Имени</h2>
+<center><img src="name2.jpg" alt="Кристалл Имени"></center>
+<h2>Врата имени</h2>
+	<pre>
+		{% for row in data['gates']%}
+			{{row}}<br>
+		{% endfor %}
+	</pre>
+<h2>Порталы имени</h2>
+{% for n in data['portals']%}
+	<h3>Порталы длиной {{n}}</h3>
+	{{data['portals'][n]}}<br>
+{% endfor %}
+</body>
+</html>

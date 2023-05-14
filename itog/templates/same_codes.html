@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Резонансы</title>
+	<style>
+		h2{text-align: center; color: blue;}
+		body{padding: 20px;	font-size: 20px;}
+		table{border-collapse: collapse;}
+		th, td{border: 1px solid gray; padding: 5px; text-align: center;}
+		.selectable tr:hover{background-color: yellow; cursor: pointer;}
+		.red{color: red;}
+	</style>
+</head>
+<body>
+{% for parameter in data -%}
+		<h2>Резонансы по  параметру "{{parameter}}"</h2>
+			<center>
+				<table class="selectable">
+					<tr><th>Имя</th><th>Код</th><th>Резонансы</th></tr>
+					{% for names in data[parameter] -%}
+						<tr><td>{{ names['name']}}</td><td>{{ names['code']}}</td><td>{{names['names']}}</td></tr>
+					{% endfor %}
+				</table>
+			</center>
+{% endfor %}
+
+<h2>Резонансы по числам, полученным перестановкой цифр УВ</h2>
+<center>
+	<table class="selectable">
+		<tr>
+			<th>Имя</th>
+			<th>Код</th>
+			<th>Резонансы</th>
+		</tr>
+	{% for name in permutation_resonances -%}
+		<tr>
+			<td rowspan="{{permutation_resonances[name]|length}}">{{name}} </td>
+			<td>{{permutation_resonances[name][0]['code']}}</td>
+			<td>{{permutation_resonances[name][0]['names']}}</td>
+		</tr>
+		{% for record in permutation_resonances[name][1:] -%}
+		<tr>
+			<td>{{record['code']}}</td>
+			<td>{{record['names']}}</td>
+		</tr>
+		{% endfor %}
+	{% endfor %}
+	</table>
+</center>
+</body>
+</html>

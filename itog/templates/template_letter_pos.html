@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Сгенерированные деревья</title>
+	<style>
+		h2{text-align: center; color: blue;}
+		.blue{color: blue;}
+		body{padding: 20px;	font-size: 20px;}
+		table{border-collapse: collapse;}
+		th, td{padding: 5px; text-align: center;}
+		.selectable th, .selectable td{border: 1px solid gray; padding: 5px; text-align: center;}
+		.selectable tr:hover{background-color: yellow; cursor: pointer;}
+		.red{color: red;}
+		.label {color: green; font-size: 15px; font-style: italic;}
+		.bottom {border-bottom: 3px solid red;}
+		.left {border-left: 3px solid red;}
+		.right {border-right: 3px solid red;}
+		.additional_info {color: #333;}
+		.medium-width{max-width: 700px;}
+		td{width: 6%;}
+		.round{width: 15px; height: 15px; border: 1px solid black; display: inline-block; border-radius: 10px;}
+		.yellow{background-color: yellow;}
+		.gray{background-color: gray;}
+		.cyan{background-color: cyan;}
+		.purple{background-color: purple;}
+		.bold{font-weight: bolder; text-decoration: underline}
+		@media print {html, body{height: 210mm; width: 297mm;}}
+		@page {margin: 10mm 10mm 10mm 20mm;}
+		@media print {.tree, div { page-break-after: always;}}
+
+
+
+	</style>
+</head>
+<body>
+	{% for data in datas%}
+	<div class="tree">
+		<h2>{{data['title']}}</h2>
+		<center>
+		<table width="100%">
+			<tr class = "label">
+				<td colspan="2">Прабабушка (МММ)</td>
+				<td colspan="2">Прадед (ОММ)</td>
+				<td colspan="2">Прабабушка (МОМ)</td>
+				<td colspan="2">Прадед (ООМ)</td>
+				<td colspan="2">Прабабушка (ММО)</td>
+				<td colspan="2">Прадед (ОМО)</td>
+				<td colspan="2">Прабабушка (МОО)</td>
+				<td colspan="2">Прадед (ООО)</td>
+			</tr>
+			<tr>
+				{% for i in range(8)%}
+					<td colspan="2">{{data['letters'][i]}}</td>
+				{% endfor %}
+			</tr>
+			<tr>
+				{% for i in range(4)%}
+				<td></td>
+				<td colspan="2" class="left bottom right"></td>
+				<td></td>
+				{% endfor %}
+			</tr>
+			<tr>
+				{% for i in range(4)%}
+				<td></td>
+				<td class="right"></td>
+				<td></td>
+				<td></td>
+				{% endfor %}
+			</tr>
+			<tr class = "label">
+				<td colspan="4">Бабушка (ММ)</td>
+				<td colspan="4">Дед (ОМ)</td>
+				<td colspan="4">Бабушка (МО)</td>
+				<td colspan="4">Дед (ОО)</td>
+			</tr>
+			<tr>
+				{% for i in range(8, 12)%}
+					<td colspan="4">{{data['letters'][i]}}</td>
+				{% endfor %}
+			</tr>
+			<tr>
+				{% for i in range(2)%}
+				<td colspan="2"></td>
+				<td colspan="4" class="left bottom right"></td>
+				<td colspan="2"></td>
+				{% endfor %}
+			</tr>
+			<tr>
+				{% for i in range(2)%}
+				<td colspan="4" class="right"></td>
+				<td colspan="4"></td>
+				{% endfor %}
+			</tr>
+			<tr class = "label">
+				<td colspan="8">Мать (М)</td>
+				<td colspan="8">Отец (О)</td>
+			</tr>
+			<tr>
+				{% for i in range(12, 14)%}
+					<td colspan="8">{{data['letters'][i]}}</td>
+				{% endfor %}
+			</tr>
+			<tr>
+				<td colspan="4"></td>
+				<td colspan="8" class="left bottom right"></td>
+				<td colspan="4"></td>
+			</tr>
+			<tr>
+				<td colspan="4"></td>
+				<td colspan="4" class="right"></td>
+				<td colspan="4"></td>
+				<td colspan="4"></td>
+			</tr>
+			<tr class = "label">
+				<td colspan="16">Субьект</td>
+			</tr>
+			<tr>
+				<td colspan="16">{{data['letters'][14]}}</td>
+			</tr>
+		</table>
+		</center>
+	</div>
+
+		{% if data["additional_report"]%}
+			{% if data['title'] == "Удельные веса"%}
+				<div class = "additional_info">
+				<center>
+					<h3>Таблица имен в порядке убывания УВ</h3>
+					<table class="selectable" width="50%">
+						<tr>
+							<th>Имя</th><th>Удельный вес</th>
+						</tr>
+						{% for row in data["additional_report"]["table"]%}
+						<tr>
+							<td>{{row["name"]}}({{row["status"]}})</td><td>{{row["value"]}}</td>
+						</tr>
+						{% endfor %}
+					</table>
+				{% set father_branch = data["additional_report"]["father_branch"] %}
+				{% set mother_branch = data["additional_report"]["mother_branch"] %}
+				{% set male_names = data["additional_report"]["male_names"] %}
+				{% set female_names = data["additional_report"]["female_names"] %}
+				УВ отцовской ветки = {{father_branch}} ({{(100 * (father_branch/(father_branch + mother_branch)))|round(0)|int}}%),
+				УВ материнской ветки = {{mother_branch}} ({{(100 * (mother_branch/(father_branch + mother_branch)))|round(0)|int}}%),
+				Пропорция: {{father_branch}}/{{mother_branch}} = {{(father_branch/mother_branch)|round(2)}}<br>
+				УВ мужских имен = {{male_names}} ({{(100 * (male_names/(female_names + male_names)))|round(0)|int}}%),
+				УВ женских имен = {{female_names}} ({{(100 * (female_names/(female_names + male_names)))|round(0)|int}}%),
+				Пропорция: {{male_names}}/{{female_names}} = {{(male_names/female_names)|round(2)}}
+				</center>
+				</div>
+			{% endif %}
+			{% if data['title'] == "Бог имени"%}
+				<div class = "additional_info">
+				<center>
+					<h3>Таблица "Бог имени"</h3>
+					<table class="selectable" width="50%">
+						<tr>
+							<th>Имя</th><th>Бог имени</th><th>Резонансы</th>
+						</tr>
+						{% for row in data["additional_report"]["table"]%}
+						<tr>
+							<td>{{row["name"]}}({{row["status"]}})</td><td>{{row["god_code"]}}</td><td>{{row["similar"]}}</td>
+						</tr>
+						{% endfor %}
+					</table>
+					Богиня Мать родовой системы {{data["additional_report"]["mother_god"]}}<br>
+					Бог Отьцъ родовой системы {{data["additional_report"]["father_god"]}}<br>
+					Бог родовой системы {{data["additional_report"]["system_god"]}}<br>
+
+				</center>
+				</div>
+			{% endif %}
+			{% if 'Буквы на позиции' in data['title'] %}
+				<div>
+					<b>Слова, которые можно составить из букв генограммы:</b><br>{{data['additional_report']}}
+				</div>
+			{% endif %}
+
+			{% if data['title'] == 'Буквы на последней позиции' %}
+				<div>
+					<p>Процент имен с отрицательным зарядом последней буквы в генограмме: {{data["additional_report"]["negative_percentage"]}}%</p>
+					{%if data["additional_report"]["names"]%}
+						Список таких имен с их статусами:
+						<ul>
+						{%for name in data["additional_report"]["names"]%}
+							<li>{{name}}</li>
+						{%endfor%}
+						</ul>
+					{% else %}
+						Имена с отрицательным зарядом последней буквы не обнаружены!
+					{%endif%}
+				</div>
+			{% endif %}
+
+
+			{% if data['title'] == 'Энергетическая направленность (E)' %}
+				<div>
+					<center>
+						<p>
+						Легенда:<br>
+						<span class = "round yellow"></span> Гармониный
+							<span class = "round gray"></span> Псевдогармоничный
+							<span class = "round cyan"></span> Инвертный
+							<span class = "round purple"></span> Первертный
+						</p>
+						Таблица имен в порядке убвания E:
+						<table class = "selectable medium-width">
+							<tr><th>Имя со статусом</th><th>E</th></tr>
+						{%for row in data["additional_report"]["names"]%}
+							<tr>
+								<td>{{row['name']}}({{row['status']}})</td>
+								<td>{{row['e']}}</td>
+							</tr>
+						{%endfor%}
+						</table>
+					</center>
+				</div>
+			{% endif %}
+
+			{% if data['title'] == 'Опорные буквы и их позиции' %}
+				<div>
+					<h2>Таблица со статистикой по опорной букве (без учета позиции)</h2>
+					<center>
+						<table class="medium-width selectable">
+							<tr>
+								<td>Буква</td>
+								<td>Количество</td>
+								<td>Процент</td>
+							</tr>
+							{%for letter in data['additional_report']['stat']%}
+							<tr>
+								<td>{{letter}}</td>
+								<td>{{data['additional_report']['stat'][letter]['count']}}</td>
+								<td>{{data['additional_report']['stat'][letter]['percentage']}}</td>
+							</tr>
+							{%endfor%}
+						</table>
+					</center>
+
+					<h2>Таблица со статистикой по позиции опорной буквы</h2>
+					<center>
+						<table class="medium-width selectable">
+							<tr>
+								<td>Позиция</td>
+								<td>Количество</td>
+								<td>Процент</td>
+							</tr>
+							{%for letter in data['additional_report']['pos_stat']%}
+							<tr>
+								<td>{{letter}}</td>
+								<td>{{data['additional_report']['pos_stat'][letter]['count']}}</td>
+								<td>{{data['additional_report']['pos_stat'][letter]['percentage']}}</td>
+							</tr>
+							{%endfor%}
+						</table>
+					</center>
+				</div>
+			{% endif %}
+
+
+
+			{% if data['title'] == 'Ударные буквы' %}
+				<div>
+					<h2>Таблица со статистикой по ударной букве (без учета позиции)</h2>
+					<center>
+						<table class="medium-width selectable">
+							<tr>
+								<td>Буква</td>
+								<td>Количество</td>
+								<td>Процент</td>
+							</tr>
+							{%for row in data['additional_report']['letters_stat']%}
+							<tr>
+								<td>{{row['letter']}}</td>
+								<td>{{row['count']}}</td>
+								<td>{{row['percentage']}}%</td>
+							</tr>
+							{%endfor%}
+						</table>
+					</center>
+
+					<h2>Таблица со статистикой по позиции ударной буквы</h2>
+					<center>
+						<table class="medium-width selectable">
+							<tr>
+								<td>Позиция</td>
+								<td>Количество</td>
+								<td>Процент</td>
+							</tr>
+							{%for row in data['additional_report']['orders_stat']%}
+							<tr>
+								<td>{{row['order']}}</td>
+								<td>{{row['count']}}</td>
+								<td>{{row['percentage']}}%</td>
+							</tr>
+							{%endfor%}
+						</table>
+					</center>
+				</div>
+			{% endif %}
+
+
+
+		{% endif %}
+	{% endfor %}
+</body>
+</html>

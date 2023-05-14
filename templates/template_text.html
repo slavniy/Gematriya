@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Анализ текста</title>
+	<style>
+		h2{text-align: center; color: blue;}
+		body{padding: 20px;	font-size: 20px;}
+		table{border-collapse: collapse;}
+		th, td{border: 1px solid gray; padding: 5px; text-align: center;}
+		.selectable tr:hover{background-color: yellow; cursor: pointer;}
+		.red{color: red;}
+	</style>
+</head>
+<body>
+	<h2>Статистика по тексту</h2>
+	<p>Количество букв: {{data['letter_count']}}</p>
+	<p>Количество слов: {{data['words_count']}}</p>
+	<p>Числовое значение текста: {{data['text_numerical_value']}}</p>
+	<h2>Статистика по буквам</h2>
+		<center>
+			<table class="selectable">
+				<tr><th>Буква</th><th>Найдена раз</th><th>Процент к общему количеству</th></tr>
+				{% for letter_stat in data['letter_statistics'] -%}
+					<tr><td>{{ letter_stat['letter']}}</td><td>{{ letter_stat['count']}}</td><td>{{letter_stat['percentage']}}%</td></tr>
+				{% endfor %}
+		    </table>
+		</center> 
+</body>
+</html>

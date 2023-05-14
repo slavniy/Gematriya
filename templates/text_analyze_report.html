@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        table{
+            border: 1px solid gray;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        td, th{
+            border: 1px solid gray;
+            padding: 15px;
+        }
+    </style>
+    <table>
+        <tr>
+            <th>Адрес</th>
+            <th>Слово</th>
+            <th>УВ</th>
+            <th>Е</th>
+            <th>ЧМ</th>
+            <th>Количество повторений</th>
+        </tr>
+        {% for word in data %}
+        <tr>
+            <td>
+                {% for address in word['addresses'] %}
+                {{address}}<br>
+                {% endfor %}
+            </td>
+            <td>{{word['text']}}</td>
+            <td>{{word['n_v']}}</td>
+            <td>{{word['energy']}}</td>
+            <td>{{word['length']}}</td>
+            <td>{{word['count']}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

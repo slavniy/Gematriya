@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Слова по имени</title>
+	<style>
+		h2{text-align: center; color: blue;}
+		body{padding: 20px;	font-size: 20px;}
+		table{border-collapse: collapse;}
+		th, td{border: 1px solid gray; padding: 5px; text-align: center;}
+		.selectable tr:hover{background-color: yellow; cursor: pointer;}
+		.red{color: red;}
+	</style>
+</head>
+<body>
+	<h2>Cлова, начинающиеся с букв имени</h2>
+	<center>
+		<table class="selectable">
+			<tr>
+				<th>Буква имени</th>
+				<th>Найденные слова</th>
+			</tr>
+			{% for letter in data['name']%}
+			<tr>
+				<td>{{letter}}</td>
+				<td>{{data['words'][letter]|join(', ')}}</td>
+			</tr>
+			{% endfor %}
+		</table>
+	</center>
+</body>
+</html>

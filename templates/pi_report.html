@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Резонансы</title>
+	<style>
+		h2{text-align: center; color: blue;}
+		body{padding: 20px;	font-size: 20px;}
+		table{border-collapse: collapse;}
+		th, td{border: 1px solid gray; padding: 5px; text-align: center;}
+		.selectable tr:hover{background-color: yellow; cursor: pointer;}
+		.red{color: red;}
+	</style>
+</head>
+<body>
+<h2>Расчёт числа ПИ</h2>
+<center>
+	<table>
+		{% for row in data -%}
+			<tr>
+				<td rowspan="5">{{row['male']}}<br>{{row['female']}}</td>
+				<td>Число ПИ</td>
+				<td>{{row['pi']}}</td>
+			</tr>
+			<tr>
+				<td>ТО числа ПИ</td>
+				<td>{{row['pi_sec_img']}}</td>
+			</tr>
+			<tr>
+				<td>Базовый ряд числа ПИ</td>
+				<td>{{row['base_row']}}</td>
+			</tr>
+			<tr>
+				<td>УВ базового ряда числа ПИ</td>
+				<td>{{row['base_row_numeric']}}</td>
+			</tr>
+			<tr>
+				<td>ТО УВ базового ряда числа ПИ</td>
+				<td>{{row['base_row_sec_img']}}</td>
+			</tr>
+		{% endfor %}
+	</table>
+</center>
+</body>
+</html>

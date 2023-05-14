@@ -1,0 +1,6 @@
+pyqt5~=5.15.4
+pyqt5-tools
+pyinstaller==4.7
+jinja2~=2.11.2
+pywin32~=301
+nltk~=3.6.2

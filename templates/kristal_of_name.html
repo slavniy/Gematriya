@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Кристалл имени</title>
+	<style>
+		h2{text-align: center; color: blue;}
+		body{padding: 20px;	font-size: 20px;}
+		table{border-collapse: collapse;}
+		th, td{border: 1px solid gray; padding: 5px; text-align: center;}
+		.selectable tr:hover{background-color: yellow; cursor: pointer;}
+		.red{color: red;}
+		.hide{
+			display: none;
+			transition: 0.5s;
+		}
+		h3{
+			cursor: pointer;
+		}
+		h3:hover{
+			color: red;
+		}
+	</style>
+</head>
+<body>
+<h2>Имя в контексте всей буквицы</h2>
+<center><img src="name1.jpg" alt="Имя в контексте всей буквицы"></center>
+<h2>Кристалл Имени</h2>
+<center><img src="name2.jpg" alt="Кристалл Имени"></center>
+<h2>Врата имени</h2>
+	<pre>
+		{% for row in data['gates']%}
+			{{row}}<br>
+		{% endfor %}
+	</pre>
+<h2>Порталы имени</h2>
+{% for n in data['portals']%}
+	<h3 onclick="show_content(this);">Порталы длиной {{n}} (количество: {{data['portals'][n]|length}})</h3>
+	<div>
+	{{data['portals'][n]|join(', ')}}<br>
+	</div>
+{% endfor %}
+<script>
+	function show_content(sender){
+		sender.nextElementSibling.classList.toggle("hide");
+	}
+</script>
+</body>
+</html>
