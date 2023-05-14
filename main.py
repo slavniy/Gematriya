@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QLineEdit, Q
 import e_f_fl_calculate
 import json
 import webbrowser
+from text_spliter_settings_wnd import TextSpliterSettingsWindow
 from analyzer import Ui_MainWindow
 from analyzer_func import *
 from base_genogram_func import secret_image
@@ -72,8 +73,10 @@ class Window(QMainWindow, Ui_MainWindow):
         self.db_manager_form = DbManagerWindow(self)
         self.tree_generator_form = TreeGeneratorOptionsWindow(self)
         self.calculator = CalcWindow()
+        self.text_spliter_settings_form = TextSpliterSettingsWindow(self)
         # обработка нажатия пунктов меню
         # генограммы
+        self.text_split_settings_action.triggered.connect(self.text_spliter_settings_form.show)
         self.action_load_genogram.triggered.connect(self.load_genogram)
         self.action_save_genogram.triggered.connect(self.save_genogram)
         self.action_clear_form.triggered.connect(self.clear_form)
