@@ -4,7 +4,7 @@ import csv
 import sqlite3
 from base_genogram_func import word_numerical_value, mirrored_img, complementary_img, \
     middle_of_secret_img, middle_of_secret_img_by_code
-from db_manager_form import DB_Form
+from forms.db_manager_form import DB_Form
 
 
 def translit(text):

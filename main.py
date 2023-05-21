@@ -67,13 +67,14 @@ class Window(QMainWindow, Ui_MainWindow):
         self.setGeometry(100, 100, self.window().width(), 600)
         # Базы данных
         self.action_open_db_meneger.triggered.connect(self.show_db_manager_form)
-        self.db = DbManager('db/words.db')
+        self.db = DbManager('static/db/words.db')
         # формы
         self.text_analysis_form = TextAnalysisWindow(self)
         self.db_manager_form = DbManagerWindow(self)
         self.tree_generator_form = TreeGeneratorOptionsWindow(self)
         self.calculator = CalcWindow()
         self.text_spliter_settings_form = TextSpliterSettingsWindow(self)
+        self.text_spliter_settings_form.load_state()
         # обработка нажатия пунктов меню
         # генограммы
         self.text_split_settings_action.triggered.connect(self.text_spliter_settings_form.show)
@@ -148,7 +149,7 @@ class Window(QMainWindow, Ui_MainWindow):
 
     def resizeEvent(self, event):
         """Адаптация картинки с деревом при ресайзе окна"""
-        image = QImage("fon.png")
+        image = QImage("static/fon.png")
         sized_image = image.scaled(self.window().width(), self.window().height())
         palette = QPalette()
         palette.setBrush(QPalette.Window, QBrush(sized_image))

@@ -2,8 +2,8 @@ import webbrowser
 from PyQt5 import QtWidgets
 import os
 
-from ui import Ui_MainWindow
-from ui_settings import Ui_weight_settings
+from forms.calculator_ui import Ui_MainWindow
+from forms.calculator_settings_ui import Ui_weight_settings
 import e_f_fl_calculate
 from report import report
 

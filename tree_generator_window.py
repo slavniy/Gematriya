@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QWidget, QMainWindow, QCheckBox
 import webbrowser
 from analyzer_func import get_names_created_by_text, create_report
 from base_genogram_func import *
-from tree_generator_form import Ui_PosForm
+from forms.tree_generator_form import Ui_PosForm
 
 
 def get_check_boxes(el):

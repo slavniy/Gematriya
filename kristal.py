@@ -5,7 +5,7 @@ from itertools import permutations
 
 class NameKristal:
     def __init__(self):
-        self.font = ImageFont.truetype("NotoSerif-Regular.ttf", 18, encoding='UTF-8')
+        self.font = ImageFont.truetype("static/NotoSerif-Regular.ttf", 18, encoding='UTF-8')
         self.alf = list('АБВГДеЕЖSZИiЇћКЛМНОПРСТУƔФXѾЦЧШЩЪЫьҌЮЯЭѠѦѪѨѬѮѰӨѴӔ')
         self.width = self.height = 800
         self.fon_color = (255, 255, 255)

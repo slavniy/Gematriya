@@ -5,7 +5,7 @@ from analyzer_func import get_frequency, create_report
 from analyzer_func import get_names_created_by_text
 from base_genogram_func import word_numerical_value
 from nltk.tokenize import sent_tokenize
-from text_analysis_form import Ui_Text_analisis_form
+from forms.text_analysis_form import Ui_Text_analisis_form
 
 
 def can_create_word_by_text(word, text):
