@@ -18,29 +18,60 @@
             padding: 15px;
         }
     </style>
+    {% if 'words' in data %}
+        <h2>Разбиение по словам</h2>
+        <table>
+            <tr>
+                <th>Адрес</th>
+                <th>Слово</th>
+                <th>УВ</th>
+                <th>Е</th>
+                <th>ЧМ</th>
+                <th>Количество повторений</th>
+            </tr>
+            {% for word in data['words'] %}
+            <tr>
+                <td>
+                    {% for address in word['addresses'] %}
+                    {{address}}<br>
+                    {% endfor %}
+                </td>
+                <td>{{word['text']}}</td>
+                <td>{{word['n_v']}}</td>
+                <td>{{word['energy']}}</td>
+                <td>{{word['length']}}</td>
+                <td>{{word['count']}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+    {% if 'sentences' in data %}
+    <h2>Разбиение по Предложениям</h2>
     <table>
         <tr>
             <th>Адрес</th>
-            <th>Слово</th>
+            <th>Предложение</th>
             <th>УВ</th>
             <th>Е</th>
             <th>ЧМ</th>
             <th>Количество повторений</th>
         </tr>
-        {% for word in data %}
+        {% for element in data['sentences'] %}
         <tr>
             <td>
-                {% for address in word['addresses'] %}
+                {% for address in element['addresses'] %}
                 {{address}}<br>
                 {% endfor %}
             </td>
-            <td>{{word['text']}}</td>
-            <td>{{word['n_v']}}</td>
-            <td>{{word['energy']}}</td>
-            <td>{{word['length']}}</td>
-            <td>{{word['count']}}</td>
+            <td>{{element['text']}}</td>
+            <td>{{element['n_v']}}</td>
+            <td>{{element['energy']}}</td>
+            <td>{{element['length']}}</td>
+            <td>{{element['count']}}</td>
         </tr>
         {% endfor %}
     </table>
+{% endif %}
 </body>
 </html>

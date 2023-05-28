@@ -46,6 +46,7 @@
     </property>
     <addaction name="action_text_statistic"/>
     <addaction name="action_sentence_analyzer"/>
+    <addaction name="action_split_analizer"/>
     <addaction name="action_find_words_by_name_letters"/>
     <addaction name="separator"/>
     <addaction name="action_first_letter_words"/>
@@ -89,6 +90,11 @@
   <action name="action_middle_letters_words">
    <property name="text">
     <string>Слова по промежуточным буквам</string>
+   </property>
+  </action>
+  <action name="action_split_analizer">
+   <property name="text">
+    <string>Анализ с учетом разбиения</string>
    </property>
   </action>
  </widget>

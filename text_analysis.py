@@ -6,7 +6,8 @@ from analyzer_func import get_names_created_by_text
 from base_genogram_func import word_numerical_value
 from nltk.tokenize import sent_tokenize
 from forms.text_analysis_form import Ui_Text_analisis_form
-
+from e_f_fl_calculate import e
+from pprint import pprint
 
 def can_create_word_by_text(word, text):
     cur_index = 0
@@ -16,6 +17,34 @@ def can_create_word_by_text(word, text):
         cur_index = text.index(letter, cur_index) + 1
     return True
 
+def get_areas(text):
+    while '\n\n\n' in text:
+        text = text.replace('\n\n\n', '\n\n')
+    spechial_words = ['#Область', '#Глава', '\n\n']
+    for separator in spechial_words:
+        text = text.replace(separator, '<br>')
+    return text.split('<br>')
+
+
+def get_paragraphs(area):
+    return area.split('\n')
+
+
+def get_sentences(paragraf):
+    separators = ['.', '!', '?']
+    for separator in separators:
+        paragraf = paragraf.replace(separator, separator + '<br>').strip()
+    if paragraf[-4:] == '<br>':
+        paragraf = paragraf[:-4]
+    return paragraf.split('<br>')
+
+
+def get_words(sentence):
+    prepared_text = ''
+    for letter in sentence:
+        if (letter.isalpha() or letter.isdigit() or letter == ' '):
+            prepared_text += letter
+    return prepared_text.split()
 
 class TextAnalyzer:
     """Класс содержащий функции анализа текста"""
@@ -65,7 +94,60 @@ class TextAnalysisWindow(QMainWindow, Ui_Text_analisis_form):
         self.action_first_letter_words.triggered.connect(self.words_by_text_first_letters)
         self.action_middle_letters_words.triggered.connect(self.words_by_text_middle_letters)
         self.action_last_letters_words.triggered.connect(self.words_by_text_last_letters)
+        self.action_split_analizer.triggered.connect(self.split_analizer)
 
+    def split_analizer(self):
+        data = dict()
+        setting_wnd = self.main_wnd.text_spliter_settings_form
+        text = self.textEdit.toPlainText()
+        if setting_wnd.wordCheckBox.isChecked():
+            tree = get_areas(text)
+            for area_number in range(len(tree)):
+                tree[area_number] = get_paragraphs(tree[area_number])
+                for paragraph_number in range(len(tree[area_number])):
+                    tree[area_number][paragraph_number] = get_sentences(tree[area_number][paragraph_number])
+                    for sentence_number in range(len(tree[area_number][paragraph_number])):
+                        tree[area_number][paragraph_number][sentence_number] = get_words(
+                            tree[area_number][paragraph_number][sentence_number])
+            '''Получение адресов слов'''
+            statistics = dict()
+            for area_number in range(len(tree)):
+                for paragraph_number in range(len(tree[area_number])):
+                    for sentence_number in range(len(tree[area_number][paragraph_number])):
+                        for word_number in range(len(tree[area_number][paragraph_number][sentence_number])):
+                            address = f'{area_number + 1}:{paragraph_number + 1}:{sentence_number + 1}:{word_number + 1}'
+                            word = tree[area_number][paragraph_number][sentence_number][word_number]
+                            if word not in statistics:
+                                statistics[word] = {'addresses': [], 'text': word, 'n_v': word_numerical_value(word),
+                                                    'energy': e(word), 'length': len(word), 'count': 0}
+                            statistics[word]['count'] += 1
+                            statistics[word]['addresses'].append(address)
+            data['words'] = list(statistics.values())
+
+        if setting_wnd.sentenceCheckBox.isChecked():
+            tree = get_areas(text)
+            for area_number in range(len(tree)):
+                tree[area_number] = get_paragraphs(tree[area_number])
+                for paragraph_number in range(len(tree[area_number])):
+                    tree[area_number][paragraph_number] = get_sentences(tree[area_number][paragraph_number])
+            '''Получение адресов предложений'''
+            statistics = dict()
+            for area_number in range(len(tree)):
+                for paragraph_number in range(len(tree[area_number])):
+                    for sentence_number in range(len(tree[area_number][paragraph_number])):
+                        address = f'{area_number + 1}:{paragraph_number + 1}:{sentence_number + 1}'
+                        sentence = tree[area_number][paragraph_number][sentence_number]
+                        if sentence not in statistics:
+                            statistics[sentence] = {'addresses': [], 'text': sentence, 'n_v': word_numerical_value(sentence),
+                                                'energy': e(sentence), 'length': len(sentence), 'count': 0}
+                        statistics[sentence]['count'] += 1
+                        statistics[sentence]['addresses'].append(address)
+            data['sentences'] = list(statistics.values())
+            pprint(data['sentences'])
+
+
+        path = create_report('text_analyze_report.html', data=data)
+        webbrowser.open(path)
     def load_text(self):
         """Загружаем текст в форму"""
         try:
@@ -144,4 +226,5 @@ class TextAnalysisWindow(QMainWindow, Ui_Text_analisis_form):
     def words_by_text_last_letters(self):
         text = ''.join(word[-1] for word in TextAnalyzer(self.textEdit.toPlainText()).words)
         self.words_by_text_report(text, 'Слова по последним буквам')
+
 

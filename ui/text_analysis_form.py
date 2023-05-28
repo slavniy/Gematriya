@@ -46,9 +46,12 @@ class Ui_Text_analisis_form(object):
         self.action_last_letters_words.setObjectName("action_last_letters_words")
         self.action_middle_letters_words = QtWidgets.QAction(Text_analisis_form)
         self.action_middle_letters_words.setObjectName("action_middle_letters_words")
+        self.action_split_analizer = QtWidgets.QAction(Text_analisis_form)
+        self.action_split_analizer.setObjectName("action_split_analizer")
         self.menu.addAction(self.action_load_text)
         self.menu_2.addAction(self.action_text_statistic)
         self.menu_2.addAction(self.action_sentence_analyzer)
+        self.menu_2.addAction(self.action_split_analizer)
         self.menu_2.addAction(self.action_find_words_by_name_letters)
         self.menu_2.addSeparator()
         self.menu_2.addAction(self.action_first_letter_words)
@@ -72,6 +75,7 @@ class Ui_Text_analisis_form(object):
         self.action_first_letter_words.setText(_translate("Text_analisis_form", "Слова по первым буквам"))
         self.action_last_letters_words.setText(_translate("Text_analisis_form", "Слова по последним буквам"))
         self.action_middle_letters_words.setText(_translate("Text_analisis_form", "Слова по промежуточным буквам"))
+        self.action_split_analizer.setText(_translate("Text_analisis_form", "Анализ с учетом разбиения"))
 
 
 if __name__ == "__main__":

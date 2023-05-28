@@ -8,7 +8,7 @@ import e_f_fl_calculate
 import json
 import webbrowser
 from text_spliter_settings_wnd import TextSpliterSettingsWindow
-from analyzer import Ui_MainWindow
+from forms.analyzer import Ui_MainWindow
 from analyzer_func import *
 from base_genogram_func import secret_image
 from calculator import CalcWindow

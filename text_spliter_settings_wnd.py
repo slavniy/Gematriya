@@ -28,7 +28,6 @@ class TextSpliterSettingsWindow(QMainWindow, Ui_Form):
     def load_state(self):
         with open('static/settings.json') as settings:
             data = json.load(settings)
-        print(data)
         if data["words"]:
             self.wordCheckBox.setChecked(True)
         if data["sentences"]:
@@ -39,29 +38,29 @@ class TextSpliterSettingsWindow(QMainWindow, Ui_Form):
             self.areaCheckBox.setChecked(True)
 
     def word_clicked(self):
-        if self.wordCheckBox.isChecked():
-            print('Добавили разбиение по словам!')
-        else:
-            print('Убрали разбиение по словам!')
+        # if self.wordCheckBox.isChecked():
+        #     self.main_wnd.words_split = True
+        # else:
+        #     self.main_wnd.words_split = False
         self.save_state()
 
     def sentence_clicked(self):
-        if self.sentenceCheckBox.isChecked():
-            print('Добавили разбиение по предложениям!')
-        else:
-            print('Убрали разбиение по предложениям!')
+        # if self.sentenceCheckBox.isChecked():
+        #     print('Добавили разбиение по предложениям!')
+        # else:
+        #     print('Убрали разбиение по предложениям!')
         self.save_state()
 
     def paragraf_clicked(self):
-        if self.paragrafCheckBox.isChecked():
-            print('Добавили разбиение по абзацам!')
-        else:
-            print('Убрали разбиение по абзацам!')
+        # if self.paragrafCheckBox.isChecked():
+        #     print('Добавили разбиение по абзацам!')
+        # else:
+        #     print('Убрали разбиение по абзацам!')
         self.save_state()
 
     def area_clicked(self):
-        if self.areaCheckBox.isChecked():
-            print('Добавили разбиение по областям!')
-        else:
-            print('Убрали разбиение по областям!')
+        # if self.areaCheckBox.isChecked():
+        #     print('Добавили разбиение по областям!')
+        # else:
+        #     print('Убрали разбиение по областям!')
         self.save_state()
