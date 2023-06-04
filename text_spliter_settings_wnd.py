@@ -10,10 +10,10 @@ class TextSpliterSettingsWindow(QMainWindow, Ui_Form):
         super().__init__()
         self.setupUi(self)
         self.main_wnd = main_wnd
-        self.wordCheckBox.stateChanged.connect(self.word_clicked)
-        self.sentenceCheckBox.stateChanged.connect(self.sentence_clicked)
-        self.paragrafCheckBox.stateChanged.connect(self.paragraf_clicked)
-        self.areaCheckBox.stateChanged.connect(self.area_clicked)
+        self.wordCheckBox.stateChanged.connect(self.save_state)
+        self.sentenceCheckBox.stateChanged.connect(self.save_state)
+        self.paragrafCheckBox.stateChanged.connect(self.save_state)
+        self.areaCheckBox.stateChanged.connect(self.save_state)
 
     def save_state(self):
         data = {
@@ -36,31 +36,3 @@ class TextSpliterSettingsWindow(QMainWindow, Ui_Form):
             self.paragrafCheckBox.setChecked(True)
         if data["areas"]:
             self.areaCheckBox.setChecked(True)
-
-    def word_clicked(self):
-        # if self.wordCheckBox.isChecked():
-        #     self.main_wnd.words_split = True
-        # else:
-        #     self.main_wnd.words_split = False
-        self.save_state()
-
-    def sentence_clicked(self):
-        # if self.sentenceCheckBox.isChecked():
-        #     print('Добавили разбиение по предложениям!')
-        # else:
-        #     print('Убрали разбиение по предложениям!')
-        self.save_state()
-
-    def paragraf_clicked(self):
-        # if self.paragrafCheckBox.isChecked():
-        #     print('Добавили разбиение по абзацам!')
-        # else:
-        #     print('Убрали разбиение по абзацам!')
-        self.save_state()
-
-    def area_clicked(self):
-        # if self.areaCheckBox.isChecked():
-        #     print('Добавили разбиение по областям!')
-        # else:
-        #     print('Убрали разбиение по областям!')
-        self.save_state()

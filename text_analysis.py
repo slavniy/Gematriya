@@ -111,6 +111,8 @@ class TextAnalysisWindow(QMainWindow, Ui_Text_analisis_form):
                             tree[area_number][paragraph_number][sentence_number])
             '''Получение адресов слов'''
             statistics = dict()
+            words_statistics = dict()
+            total = 0
             for area_number in range(len(tree)):
                 for paragraph_number in range(len(tree[area_number])):
                     for sentence_number in range(len(tree[area_number][paragraph_number])):
@@ -122,8 +124,20 @@ class TextAnalysisWindow(QMainWindow, Ui_Text_analisis_form):
                                                     'energy': e(word), 'length': len(word), 'count': 0}
                             statistics[word]['count'] += 1
                             statistics[word]['addresses'].append(address)
-            data['words'] = list(statistics.values())
+                            # формирование статистики по буквам
+                            letter = word[0].upper()
+                            if letter not in words_statistics:
+                                words_statistics[letter] = {'count':0, 'percent':0, 'words':[], 'adresses':[]}
+                            total += 1
+                            words_statistics[letter]['count'] += 1
+                            words_statistics[letter]['words'].append(word)
+                            words_statistics[letter]['adresses'].append(address)
+                            words_statistics[letter]['percent'] = round((words_statistics[letter]['count'] / total) * 100,2)
+            data['words'] = dict()
+            data['words']['elements'] = list(statistics.values())
+            data['words']['letter_statistics'] = words_statistics
 
+# если выбрали разбиение по предложениям
         if setting_wnd.sentenceCheckBox.isChecked():
             tree = get_areas(text)
             for area_number in range(len(tree)):
@@ -142,8 +156,8 @@ class TextAnalysisWindow(QMainWindow, Ui_Text_analisis_form):
                                                 'energy': e(sentence), 'length': len(sentence), 'count': 0}
                         statistics[sentence]['count'] += 1
                         statistics[sentence]['addresses'].append(address)
-            data['sentences'] = list(statistics.values())
-            pprint(data['sentences'])
+            data['sentences'] = dict()
+            data['sentences']['elements'] = list(statistics.values())
 
 
         path = create_report('text_analyze_report.html', data=data)

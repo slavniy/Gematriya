@@ -18,8 +18,10 @@
             padding: 15px;
         }
     </style>
-    {% if 'words' in data %}
-        <h2>Разбиение по словам</h2>
+
+
+    {% for element in data %}
+        <h2 onclick="show_content(this);">Разбиение по словам</h2>
         <table>
             <tr>
                 <th>Адрес</th>
@@ -29,49 +31,75 @@
                 <th>ЧМ</th>
                 <th>Количество повторений</th>
             </tr>
-            {% for word in data['words'] %}
+            {% for el in data[element]['elements'] %}
             <tr>
                 <td>
-                    {% for address in word['addresses'] %}
+                    {% for address in el['addresses'] %}
                     {{address}}<br>
                     {% endfor %}
                 </td>
-                <td>{{word['text']}}</td>
-                <td>{{word['n_v']}}</td>
-                <td>{{word['energy']}}</td>
-                <td>{{word['length']}}</td>
-                <td>{{word['count']}}</td>
+                <td>{{el['text']}}</td>
+                <td>{{el['n_v']}}</td>
+                <td>{{el['energy']}}</td>
+                <td>{{el['length']}}</td>
+                <td>{{el['count']}}</td>
             </tr>
             {% endfor %}
         </table>
-    {% endif %}
 
-    {% if 'sentences' in data %}
-    <h2>Разбиение по Предложениям</h2>
-    <table>
-        <tr>
-            <th>Адрес</th>
-            <th>Предложение</th>
-            <th>УВ</th>
-            <th>Е</th>
-            <th>ЧМ</th>
-            <th>Количество повторений</th>
-        </tr>
-        {% for element in data['sentences'] %}
-        <tr>
-            <td>
-                {% for address in element['addresses'] %}
-                {{address}}<br>
-                {% endfor %}
-            </td>
-            <td>{{element['text']}}</td>
-            <td>{{element['n_v']}}</td>
-            <td>{{element['energy']}}</td>
-            <td>{{element['length']}}</td>
-            <td>{{element['count']}}</td>
-        </tr>
-        {% endfor %}
-    </table>
-{% endif %}
+    <h2 onclick="show_content(this);">Статистика по буквам для слова</h2>
+            <table>
+            <tr>
+                <th>Буква</th>
+                <th>Кол-во</th>
+                <th>Процент</th>
+                <th>Слово</th>
+                <th>Адресс</th>
+            </tr>
+            {% for letter in data[element]['letter_statistics'] %}
+            <tr>
+                <td>
+                    {{letter}}
+                </td>
+                <td>
+                    {{data[element]['letter_statistics'][letter]['count']}}
+                </td>
+                <td>
+                    {{data[element]['letter_statistics'][letter]['percent']}}
+                </td>
+                <td>
+                    {% for el in data[element]['letter_statistics'][letter]['words'] %}
+                    {{el}}<br>
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for adr in data[element]['letter_statistics'][letter]['adresses'] %}
+                    {{adr}}<br>
+                    {% endfor %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+    {% endfor %}
+
+
 </body>
 </html>
+<style>
+h2{
+cursor: pointer;
+}
+h2:hover{
+color: blue;
+}
+.hide{
+    display: none;
+    transition: 0.5s;
+}
+</style>
+<script>
+	function show_content(sender){
+		sender.nextElementSibling.classList.toggle("hide");
+	}
+</script>
