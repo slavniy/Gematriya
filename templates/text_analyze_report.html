@@ -21,7 +21,7 @@
 
 
     {% for element in data %}
-        <h2 onclick="show_content(this);">Разбиение по словам</h2>
+        <h2 onclick="show_content(this);">{{data[element]['title']}}</h2>
         <table>
             <tr>
                 <th>Адрес</th>

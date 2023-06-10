@@ -83,6 +83,27 @@ class TextAnalyzer:
 class TextAnalysisWindow(QMainWindow, Ui_Text_analisis_form):
     """Класс виджета анализатора текста"""
 
+    def create_statistics(self, elements):
+        statistics = dict()
+        letters_statistics = dict()
+        total = 0
+        for element, address in elements:
+            if element not in statistics:
+                statistics[element] = {'addresses': [], 'text': element, 'n_v': word_numerical_value(element),
+                                       'energy': e(element), 'length': len(element), 'count': 0}
+            statistics[element]['count'] += 1
+            statistics[element]['addresses'].append(address)
+            # формирование статистики по буквам
+            letter = element[0].upper()
+            if letter not in letters_statistics:
+                letters_statistics[letter] = {'count': 0, 'percent': 0, 'words': [], 'adresses': []}
+            total += 1
+            letters_statistics[letter]['count'] += 1
+            letters_statistics[letter]['words'].append(element)
+            letters_statistics[letter]['adresses'].append(address)
+            letters_statistics[letter]['percent'] = round((letters_statistics[letter]['count'] / total) * 100, 2)
+        return list(statistics.values()), letters_statistics
+
     def __init__(self, main_wnd: QMainWindow):
         super().__init__()
         self.setupUi(self)
@@ -110,32 +131,17 @@ class TextAnalysisWindow(QMainWindow, Ui_Text_analisis_form):
                         tree[area_number][paragraph_number][sentence_number] = get_words(
                             tree[area_number][paragraph_number][sentence_number])
             '''Получение адресов слов'''
-            statistics = dict()
-            words_statistics = dict()
-            total = 0
+            elements = []
             for area_number in range(len(tree)):
                 for paragraph_number in range(len(tree[area_number])):
                     for sentence_number in range(len(tree[area_number][paragraph_number])):
                         for word_number in range(len(tree[area_number][paragraph_number][sentence_number])):
                             address = f'{area_number + 1}:{paragraph_number + 1}:{sentence_number + 1}:{word_number + 1}'
-                            word = tree[area_number][paragraph_number][sentence_number][word_number]
-                            if word not in statistics:
-                                statistics[word] = {'addresses': [], 'text': word, 'n_v': word_numerical_value(word),
-                                                    'energy': e(word), 'length': len(word), 'count': 0}
-                            statistics[word]['count'] += 1
-                            statistics[word]['addresses'].append(address)
-                            # формирование статистики по буквам
-                            letter = word[0].upper()
-                            if letter not in words_statistics:
-                                words_statistics[letter] = {'count':0, 'percent':0, 'words':[], 'adresses':[]}
-                            total += 1
-                            words_statistics[letter]['count'] += 1
-                            words_statistics[letter]['words'].append(word)
-                            words_statistics[letter]['adresses'].append(address)
-                            words_statistics[letter]['percent'] = round((words_statistics[letter]['count'] / total) * 100,2)
+                            element = tree[area_number][paragraph_number][sentence_number][word_number]
+                            elements.append((element, address))
             data['words'] = dict()
-            data['words']['elements'] = list(statistics.values())
-            data['words']['letter_statistics'] = words_statistics
+            data['words']['elements'], data['words']['letter_statistics'] = self.create_statistics(elements)
+            data['words']['title'] = 'Разбиение по словам'
 
 # если выбрали разбиение по предложениям
         if setting_wnd.sentenceCheckBox.isChecked():
@@ -145,19 +151,16 @@ class TextAnalysisWindow(QMainWindow, Ui_Text_analisis_form):
                 for paragraph_number in range(len(tree[area_number])):
                     tree[area_number][paragraph_number] = get_sentences(tree[area_number][paragraph_number])
             '''Получение адресов предложений'''
-            statistics = dict()
+            elements = []
             for area_number in range(len(tree)):
                 for paragraph_number in range(len(tree[area_number])):
                     for sentence_number in range(len(tree[area_number][paragraph_number])):
                         address = f'{area_number + 1}:{paragraph_number + 1}:{sentence_number + 1}'
-                        sentence = tree[area_number][paragraph_number][sentence_number]
-                        if sentence not in statistics:
-                            statistics[sentence] = {'addresses': [], 'text': sentence, 'n_v': word_numerical_value(sentence),
-                                                'energy': e(sentence), 'length': len(sentence), 'count': 0}
-                        statistics[sentence]['count'] += 1
-                        statistics[sentence]['addresses'].append(address)
+                        element = tree[area_number][paragraph_number][sentence_number]
+                        elements.append((element, address))
             data['sentences'] = dict()
-            data['sentences']['elements'] = list(statistics.values())
+            data['sentences']['elements'], data['sentences']['letter_statistics'] = self.create_statistics(elements)
+            data['sentences']['title'] = 'Разбиение по предложениям'
 
 
         path = create_report('text_analyze_report.html', data=data)
