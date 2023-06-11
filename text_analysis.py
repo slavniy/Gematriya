@@ -23,11 +23,11 @@ def get_areas(text):
     spechial_words = ['#Область', '#Глава', '\n\n']
     for separator in spechial_words:
         text = text.replace(separator, '<br>')
-    return text.split('<br>')
+    return [el.strip() for el in text.split('<br>')]
 
 
 def get_paragraphs(area):
-    return area.split('\n')
+    return [el.strip() for el in area.split('\n')]
 
 
 def get_sentences(paragraf):
@@ -36,7 +36,7 @@ def get_sentences(paragraf):
         paragraf = paragraf.replace(separator, separator + '<br>').strip()
     if paragraf[-4:] == '<br>':
         paragraf = paragraf[:-4]
-    return paragraf.split('<br>')
+    return [el.strip() for el in paragraf.split('<br>')]
 
 
 def get_words(sentence):
@@ -44,7 +44,7 @@ def get_words(sentence):
     for letter in sentence:
         if (letter.isalpha() or letter.isdigit() or letter == ' '):
             prepared_text += letter
-    return prepared_text.split()
+    return [el.strip() for el in prepared_text.split()]
 
 class TextAnalyzer:
     """Класс содержащий функции анализа текста"""
@@ -161,6 +161,33 @@ class TextAnalysisWindow(QMainWindow, Ui_Text_analisis_form):
             data['sentences'] = dict()
             data['sentences']['elements'], data['sentences']['letter_statistics'] = self.create_statistics(elements)
             data['sentences']['title'] = 'Разбиение по предложениям'
+
+        if setting_wnd.paragrafCheckBox.isChecked():
+            tree = get_areas(text)
+            for area_number in range(len(tree)):
+                tree[area_number] = get_paragraphs(tree[area_number])
+            '''Получение адресов абзацев'''
+            elements = []
+            for area_number in range(len(tree)):
+                for paragraph_number in range(len(tree[area_number])):
+                    address = f'{area_number + 1}:{paragraph_number + 1}'
+                    element = tree[area_number][paragraph_number]
+                    elements.append((element, address))
+            data['paragraphs'] = dict()
+            data['paragraphs']['elements'], data['paragraphs']['letter_statistics'] = self.create_statistics(elements)
+            data['paragraphs']['title'] = 'Разбиение по абзацам'
+
+        if setting_wnd.areaCheckBox.isChecked():
+            tree = get_areas(text)
+            '''Получение адресов областям'''
+            elements = []
+            for area_number in range(len(tree)):
+                address = f'{area_number + 1}'
+                element = tree[area_number]
+                elements.append((element, address))
+            data['areas'] = dict()
+            data['areas']['elements'], data['areas']['letter_statistics'] = self.create_statistics(elements)
+            data['areas']['title'] = 'Разбиение по областям'
 
 
         path = create_report('text_analyze_report.html', data=data)
