@@ -101,6 +101,7 @@ class TextAnalysisWindow(QMainWindow, Ui_Text_analisis_form):
             letters_statistics[letter]['count'] += 1
             letters_statistics[letter]['words'].append(element)
             letters_statistics[letter]['adresses'].append(address)
+        for letter in letters_statistics:
             letters_statistics[letter]['percent'] = round((letters_statistics[letter]['count'] / total) * 100, 2)
         return list(statistics.values()), letters_statistics
 
@@ -122,8 +123,8 @@ class TextAnalysisWindow(QMainWindow, Ui_Text_analisis_form):
         setting_wnd = self.main_wnd.text_spliter_settings_form
         text = self.textEdit.toPlainText()
 
+        tree = get_areas(text)
         if setting_wnd.areaCheckBox.isChecked():
-            tree = get_areas(text)
             '''Получение адресов областям'''
             elements = []
             for area_number in range(len(tree)):
@@ -134,11 +135,9 @@ class TextAnalysisWindow(QMainWindow, Ui_Text_analisis_form):
             data['areas']['elements'], data['areas']['letter_statistics'] = self.create_statistics(elements)
             data['areas']['title'] = 'Разбиение по областям'
 
+        for area_number in range(len(tree)):
+            tree[area_number] = get_paragraphs(tree[area_number])
         if setting_wnd.paragrafCheckBox.isChecked():
-            tree = get_areas(text)
-            for area_number in range(len(tree)):
-                tree[area_number] = get_paragraphs(tree[area_number])
-            '''Получение адресов абзацев'''
             elements = []
             for area_number in range(len(tree)):
                 for paragraph_number in range(len(tree[area_number])):
@@ -148,34 +147,11 @@ class TextAnalysisWindow(QMainWindow, Ui_Text_analisis_form):
             data['paragraphs'] = dict()
             data['paragraphs']['elements'], data['paragraphs']['letter_statistics'] = self.create_statistics(elements)
             data['paragraphs']['title'] = 'Разбиение по абзацам'
-
-            # если выбрали разбиение по предложениям
-            if setting_wnd.sentenceCheckBox.isChecked():
-                tree = get_areas(text)
-                for area_number in range(len(tree)):
-                    tree[area_number] = get_paragraphs(tree[area_number])
-                    for paragraph_number in range(len(tree[area_number])):
-                        tree[area_number][paragraph_number] = get_sentences(tree[area_number][paragraph_number])
-                '''Получение адресов предложений'''
-                elements = []
-                for area_number in range(len(tree)):
-                    for paragraph_number in range(len(tree[area_number])):
-                        for sentence_number in range(len(tree[area_number][paragraph_number])):
-                            address = f'{area_number + 1}:{paragraph_number + 1}:{sentence_number + 1}'
-                            element = tree[area_number][paragraph_number][sentence_number]
-                            elements.append((element, address))
-                data['sentences'] = dict()
-                data['sentences']['elements'], data['sentences']['letter_statistics'] = self.create_statistics(elements)
-                data['sentences']['title'] = 'Разбиение по предложениям'
-
-
+        for area_number in range(len(tree)):
+            for paragraph_number in range(len(tree[area_number])):
+                tree[area_number][paragraph_number] = get_sentences(tree[area_number][paragraph_number])
+        pprint(tree)
         if setting_wnd.sentenceCheckBox.isChecked():
-            tree = get_areas(text)
-            for area_number in range(len(tree)):
-                tree[area_number] = get_paragraphs(tree[area_number])
-                for paragraph_number in range(len(tree[area_number])):
-                    tree[area_number][paragraph_number] = get_sentences(tree[area_number][paragraph_number])
-            '''Получение адресов предложений'''
             elements = []
             for area_number in range(len(tree)):
                 for paragraph_number in range(len(tree[area_number])):
@@ -187,17 +163,12 @@ class TextAnalysisWindow(QMainWindow, Ui_Text_analisis_form):
             data['sentences']['elements'], data['sentences']['letter_statistics'] = self.create_statistics(
                 elements)
             data['sentences']['title'] = 'Разбиение по предложениям'
-
+        for area_number in range(len(tree)):
+            for paragraph_number in range(len(tree[area_number])):
+                for sentence_number in range(len(tree[area_number][paragraph_number])):
+                    tree[area_number][paragraph_number][sentence_number] = get_words(
+                        tree[area_number][paragraph_number][sentence_number])
         if setting_wnd.wordCheckBox.isChecked():
-            tree = get_areas(text)
-            for area_number in range(len(tree)):
-                tree[area_number] = get_paragraphs(tree[area_number])
-                for paragraph_number in range(len(tree[area_number])):
-                    tree[area_number][paragraph_number] = get_sentences(tree[area_number][paragraph_number])
-                    for sentence_number in range(len(tree[area_number][paragraph_number])):
-                        tree[area_number][paragraph_number][sentence_number] = get_words(
-                            tree[area_number][paragraph_number][sentence_number])
-            '''Получение адресов слов'''
             elements = []
             for area_number in range(len(tree)):
                 for paragraph_number in range(len(tree[area_number])):
